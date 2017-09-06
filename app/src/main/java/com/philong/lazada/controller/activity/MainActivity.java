@@ -5,14 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 
 import com.philong.lazada.R;
 import com.philong.lazada.controller.adapter.AdapterDanhMucViewPager;
+import com.philong.lazada.controller.adapter.AdapterExpandableListView;
+import com.philong.lazada.model.LoaiSanPham;
+import com.philong.lazada.util.DownLoadJsonGet;
+import com.philong.lazada.util.ParseJson;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mCameraImageButton;
 
     private AdapterDanhMucViewPager mAdapterDanhMucViewPager;
+
+    //DrawwerLayout
+    private DrawerLayout mMainDrawerLayout;
+    private ExpandableListView mMainExpandableListView;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private AdapterExpandableListView mAdapterExpandableListView;
+
 
     public static Intent newIntent(Context context){
         Intent intent = new Intent(context, MainActivity.class);
@@ -39,15 +56,34 @@ public class MainActivity extends AppCompatActivity {
         mMainViewPager = (ViewPager) findViewById(R.id.main_view_pager);
         mSearchButton = (Button) findViewById(R.id.main_search_button);
         mCameraImageButton = (ImageButton) findViewById(R.id.main_camera_image_button);
+        mMainDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+        mMainExpandableListView = (ExpandableListView) findViewById(R.id.main_expand_list_view);
         //Set toolbar
         if(getSupportActionBar() == null){
             setSupportActionBar(mToolbar);
             getSupportActionBar().setTitle("Lazada");
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //Set Tablayout, ViewPager
         mMainTabLayout.setupWithViewPager(mMainViewPager);
         mAdapterDanhMucViewPager = new AdapterDanhMucViewPager(getSupportFragmentManager());
         mMainViewPager.setAdapter(mAdapterDanhMucViewPager);
+        //Set drawer layout
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mMainDrawerLayout, R.string.open, R.string.close);
+        mMainDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        mActionBarDrawerToggle.syncState();
+        //Set Expandable Menu
+        new DownLoadJsonGet(new DownLoadJsonGet.ProtocolDownLoadJsonGet() {
+            @Override
+            public void compleDownLoadJsonGet(String s) {
+                List<LoaiSanPham> loaiSanPhamList = new ParseJson().parseJsonMenuLoaiSanPham(s);
+                mAdapterExpandableListView = new AdapterExpandableListView(loaiSanPhamList, MainActivity.this);
+                mMainExpandableListView.setAdapter(mAdapterExpandableListView);
+                System.out.println();
+            }
+        }).execute(ParseJson.BASE_URL + "loai-san-pham.php?maloaicha=0");
+
 
     }
 
@@ -57,4 +93,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
