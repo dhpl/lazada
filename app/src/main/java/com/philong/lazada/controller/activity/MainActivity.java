@@ -98,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
         if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        switch(id){
+            case R.id.main_menu_dang_nhap:
+                startActivity(DangNhapActivity.newIntent(this));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }
