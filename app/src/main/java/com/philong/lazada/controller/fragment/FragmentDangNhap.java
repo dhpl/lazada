@@ -1,5 +1,7 @@
 package com.philong.lazada.controller.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.philong.lazada.R;
+import com.philong.lazada.model.NhanVien;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +37,13 @@ public class FragmentDangNhap extends Fragment {
         return fragment;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +53,8 @@ public class FragmentDangNhap extends Fragment {
         mDangNhapButton = (Button) view.findViewById(R.id.dang_nhap_button);
         mTenDangNhapTextInputEditText = (TextInputEditText) view.findViewById(R.id.dang_nhap_ten_edit_text);
         mMatKhauTextInputEditText = (TextInputEditText) view.findViewById(R.id.dang_nhap_mat_khau_edit_text);
+
+
         //Set button dang nhap
         mDangNhapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +79,7 @@ public class FragmentDangNhap extends Fragment {
                     return;
                 }
 
+
             }
         });
         return view;
@@ -81,4 +94,6 @@ public class FragmentDangNhap extends Fragment {
         }
         return false;
     }
+
+
 }

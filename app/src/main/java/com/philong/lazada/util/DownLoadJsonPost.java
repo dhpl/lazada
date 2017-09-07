@@ -69,11 +69,6 @@ public class DownLoadJsonPost extends AsyncTask<String, Void, String> {
                 inputStream.close();
                 return stringBuilder.toString();
             }
-
-
-            if(httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
-
-            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

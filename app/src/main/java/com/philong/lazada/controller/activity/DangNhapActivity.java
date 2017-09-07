@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
 
 import com.philong.lazada.R;
 import com.philong.lazada.controller.adapter.AdapterDangNhapDangKyViewPager;
+import com.philong.lazada.controller.fragment.FragmentDangKy;
+import com.philong.lazada.model.NhanVien;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class DangNhapActivity extends AppCompatActivity {
+public class DangNhapActivity extends AppCompatActivity implements FragmentDangKy.ProtocolDangKyThanhCong{
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -53,6 +48,11 @@ public class DangNhapActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void completeDangKyThanhCong(boolean isComplete, NhanVien nhanVien) {
+        if(isComplete){
+            mDangNhapViewPager.setCurrentItem(0);
 
-
+        }
+    }
 }

@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void compleDownLoadJsonGet(String s) {
                 List<LoaiSanPham> loaiSanPhamList = new ParseJson().parseJsonMenuLoaiSanPham(s);
-                mAdapterExpandableListView = new AdapterExpandableListView(loaiSanPhamList, MainActivity.this);
-                mMainExpandableListView.setAdapter(mAdapterExpandableListView);
+                if(loaiSanPhamList != null){
+                    mAdapterExpandableListView = new AdapterExpandableListView(loaiSanPhamList, MainActivity.this);
+                    mMainExpandableListView.setAdapter(mAdapterExpandableListView);
+                }
                 System.out.println();
             }
         }).execute(ParseJson.BASE_URL + "loai-san-pham.php?maloaicha=0");

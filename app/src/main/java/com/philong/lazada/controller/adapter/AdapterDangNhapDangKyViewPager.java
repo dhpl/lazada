@@ -41,4 +41,20 @@ public class AdapterDangNhapDangKyViewPager extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mTenFragments[position];
     }
+
+    public Fragment[] getFragments() {
+        return mFragments;
+    }
+
+    public void setFragments(Fragment[] fragments) {
+        mFragments = fragments;
+    }
+
+    public String[] getTenFragments() {
+        return mTenFragments;
+    }
+
+    public void setTenFragments(String[] tenFragments) {
+        mTenFragments = tenFragments;
+    }
 }

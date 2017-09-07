@@ -1,5 +1,7 @@
 package com.philong.lazada.util;
 
+import android.text.TextUtils;
+
 import com.philong.lazada.model.LoaiSanPham;
 
 import org.json.JSONArray;
@@ -18,27 +20,29 @@ public class ParseJson {
     public static final String  BASE_URL = "http://192.168.100.17/lazada/";
 
     public  List<LoaiSanPham> parseJsonMenuLoaiSanPham(String json){
-        List<LoaiSanPham> loaiSanPhamList = new ArrayList<>();
-        try {
-            System.out.println("JSON: " + json);
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = jsonObject.getJSONArray("loaisanpham");
-            int size = jsonArray.length();
-            for(int i = 0; i < size; i++){
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String maLoaiSanPham =  jsonObject1.getString("MALOAISP");
-                String maLoaiCha = jsonObject1.getString("MALOAI_CHA");
-                String tenLoaiSanPham = jsonObject1.getString("TENLOAISP");
-                LoaiSanPham loaiSanPham = new LoaiSanPham();
-                loaiSanPham.setMaLoaiCha(Integer.parseInt(maLoaiCha));
-                loaiSanPham.setTenLoaiSanPham(tenLoaiSanPham);
-                loaiSanPham.setMaLoaiSanPham(Integer.parseInt(maLoaiSanPham));
-                loaiSanPhamList.add(loaiSanPham);
+        if(!TextUtils.isEmpty(json) && json != null){
+            List<LoaiSanPham> loaiSanPhamList = new ArrayList<>();
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray("loaisanpham");
+                int size = jsonArray.length();
+                for(int i = 0; i < size; i++){
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    String maLoaiSanPham =  jsonObject1.getString("MALOAISP");
+                    String maLoaiCha = jsonObject1.getString("MALOAI_CHA");
+                    String tenLoaiSanPham = jsonObject1.getString("TENLOAISP");
+                    LoaiSanPham loaiSanPham = new LoaiSanPham();
+                    loaiSanPham.setMaLoaiCha(Integer.parseInt(maLoaiCha));
+                    loaiSanPham.setTenLoaiSanPham(tenLoaiSanPham);
+                    loaiSanPham.setMaLoaiSanPham(Integer.parseInt(maLoaiSanPham));
+                    loaiSanPhamList.add(loaiSanPham);
+                }
+                return loaiSanPhamList;
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return loaiSanPhamList;
+        return null;
     }
 
 
