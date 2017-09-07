@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ImageView
+        android:id="@+id/dien_tu_banner"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:id="@+id/dien_tu_ten_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Các thương hiệu lớn"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dien_tu_recycler_view_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:id="@+id/dien_tu_ten_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Điện thoai và máy tính bảng"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dien_tu_recycler_view_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        />
+</LinearLayout>

@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 public class NhanVien implements Parcelable{
 
-
     private int mMa, mMaLoai, mGioiTinh;
     private String mTenDangNhap, mMatKhau, mTen, mDiaChi, mNgaySinh, mSDT, mEmailDocQuyen, mEmail;
 
