@@ -1,8 +1,9 @@
 package com.philong.lazada.controller.fragment;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,9 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.philong.lazada.R;
-import com.philong.lazada.model.NhanVien;
+import com.philong.lazada.controller.activity.MainActivity;
+import com.philong.lazada.util.DownLoadJsonPost;
+import com.philong.lazada.util.ParseJson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +36,9 @@ public class FragmentDangNhap extends Fragment {
     private TextInputEditText mTenDangNhapTextInputEditText;
     private TextInputEditText mMatKhauTextInputEditText;
     private Button mDangNhapButton;
+
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     public static FragmentDangNhap newInstance() {
         Bundle args = new Bundle();
@@ -48,20 +58,20 @@ public class FragmentDangNhap extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dang_nhap, container, false);
+        //Set sharepreference
+        mSharedPreferences = getActivity().getSharedPreferences("NhanVien", Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
         //Get View
         mTenTextInputLayout = (TextInputLayout) view.findViewById(R.id.dang_nhap_ten_text_input);
         mDangNhapButton = (Button) view.findViewById(R.id.dang_nhap_button);
         mTenDangNhapTextInputEditText = (TextInputEditText) view.findViewById(R.id.dang_nhap_ten_edit_text);
         mMatKhauTextInputEditText = (TextInputEditText) view.findViewById(R.id.dang_nhap_mat_khau_edit_text);
-
-
         //Set button dang nhap
         mDangNhapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = mTenDangNhapTextInputEditText.getText().toString().trim();
-                String password = mMatKhauTextInputEditText.getText().toString().trim().replaceAll("\\s+", "");
-                System.out.println("Password: " + password);
+                final String email = mTenDangNhapTextInputEditText.getText().toString().trim();
+                final String password = mMatKhauTextInputEditText.getText().toString().trim().replaceAll("\\s+", "");
                 if(TextUtils.isEmpty(email)){
                     mTenDangNhapTextInputEditText.setError("Email không được để trống.");
                     return;
@@ -78,7 +88,32 @@ public class FragmentDangNhap extends Fragment {
                     mMatKhauTextInputEditText.setError("Mật khẩu phải lớn hơn hoặc bằng 6 ký tự.");
                     return;
                 }
+                new DownLoadJsonPost(new DownLoadJsonPost.ProtocolDownLoadJsonPost() {
+                    @Override
+                    public void completeDownLoadJsonPost(String s) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            String result = jsonObject.getString("result");
+                            if(Integer.parseInt(result) == 1){
+                                mEditor.putString("Email", email);
+                                mEditor.putString("Password", password);
+                                mEditor.commit();
+                                Toast.makeText(getActivity(), "Đăng nhập thành công.", Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getActivity().startActivity(MainActivity.newIntent(getActivity()));
+                                    }
+                                }, 2000);
+                            }else{
+                                Toast.makeText(getActivity(), "Đăng nhập thất bại.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                    }
+                }).execute(ParseJson.BASE_URL + "dang-nhap-thanh-vien.php", "email", email, "matkhau", password);
 
             }
         });

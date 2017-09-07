@@ -52,7 +52,6 @@ public class DangNhapActivity extends AppCompatActivity implements FragmentDangK
     public void completeDangKyThanhCong(boolean isComplete, NhanVien nhanVien) {
         if(isComplete){
             mDangNhapViewPager.setCurrentItem(0);
-
         }
     }
 }

@@ -2,6 +2,7 @@ package com.philong.lazada.controller.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private ExpandableListView mMainExpandableListView;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private AdapterExpandableListView mAdapterExpandableListView;
+    //Sharepreferences
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
 
     public static Intent newIntent(Context context){
@@ -47,9 +52,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        invalidateOptionsMenu();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Get sharepreferences
+        mSharedPreferences = getSharedPreferences("NhanVien", MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
         //Get view
         mToolbar = (Toolbar) findViewById(R.id.main_tool_bar);
         mMainTabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
@@ -92,6 +106,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem menuItemDangNhap = menu.findItem(R.id.main_menu_dang_nhap);
+        MenuItem menuDangXuat = menu.findItem(R.id.main_menu_dang_xuat);
+        String titleDangNhap = mSharedPreferences.getString("Email", "");
+        if(!TextUtils.isEmpty(titleDangNhap)){
+            menuItemDangNhap.setTitle(titleDangNhap);
+            menuDangXuat.setVisible(true);
+        }else{
+            menuDangXuat.setVisible(false);
+        }
         return true;
     }
 
@@ -104,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.main_menu_dang_nhap:
                 startActivity(DangNhapActivity.newIntent(this));
+                return true;
+            case R.id.main_menu_dang_xuat:
+                mEditor.clear();
+                mEditor.commit();
+                invalidateOptionsMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

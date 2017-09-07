@@ -57,6 +57,11 @@
                 android:icon="@drawable/ic_help"
                 android:title="Trợ giúp"
                 />
+            <item
+                android:id="@+id/main_menu_dang_xuat"
+                android:icon="@drawable/ic_cancel"
+                android:title="Đăng xuất"
+                />
         </menu>
     </item>
 </menu>
